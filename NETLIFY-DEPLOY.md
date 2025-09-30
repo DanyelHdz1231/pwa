@@ -3,6 +3,7 @@
 ## 📋 Preparación Previa
 
 ### 1. Verificar que la PWA esté Lista
+
 ```bash
 # Ejecutar verificación
 node verify-pwa.cjs
@@ -17,6 +18,7 @@ npm run preview
 ### 2. Archivos Necesarios para Netlify
 
 #### Crear `netlify.toml` (Configuración de despliegue)
+
 ```toml
 [build]
   publish = "dist"
@@ -61,6 +63,7 @@ npm run preview
 ### Método 1: Conexión con GitHub (Recomendado)
 
 #### Paso 1: Preparar Repositorio
+
 ```bash
 # Si no tienes git inicializado
 git init
@@ -76,6 +79,7 @@ git push -u origin main
 ```
 
 #### Paso 2: Conectar en Netlify
+
 1. Ve a [netlify.com](https://netlify.com) y regístrate/inicia sesión
 2. Click en "Add new site" > "Import an existing project"
 3. Selecciona "GitHub" y autoriza Netlify
@@ -86,6 +90,7 @@ git push -u origin main
    - **Node version**: 18
 
 #### Paso 3: Deploy Automático
+
 - Netlify detectará `netlify.toml` automáticamente
 - Deploy se iniciará automáticamente
 - Cada push a `main` redesplegará automáticamente
@@ -93,11 +98,13 @@ git push -u origin main
 ### Método 2: Deploy Manual (Drag & Drop)
 
 #### Paso 1: Generar Build
+
 ```bash
 npm run build
 ```
 
 #### Paso 2: Deploy Manual
+
 1. Ve a [netlify.com](https://netlify.com)
 2. Arrastra la carpeta `dist/` completa al área de deploy
 3. Netlify subirá todos los archivos
@@ -106,6 +113,7 @@ npm run build
 ## ⚙️ Configuración Específica para PWA
 
 ### Service Worker Headers
+
 ```toml
 # En netlify.toml - Ya incluido arriba
 [[headers]]
@@ -116,15 +124,17 @@ npm run build
 ```
 
 ### Manifest Headers
+
 ```toml
 [[headers]]
-  for = "/manifest.json"  
+  for = "/manifest.json"
   [headers.values]
     Content-Type = "application/manifest+json"
     Access-Control-Allow-Origin = "*"
 ```
 
 ### SPA Redirect para PWA
+
 ```toml
 # Importante para PWAs con routing
 [[redirects]]
@@ -136,6 +146,7 @@ npm run build
 ## 🔧 Optimizaciones Post-Deploy
 
 ### 1. Configurar Dominio Personalizado
+
 ```bash
 # En Netlify Dashboard
 1. Site settings > Domain management
@@ -145,11 +156,13 @@ npm run build
 ```
 
 ### 2. Habilitar HTTPS (Requerido para PWA)
+
 - ✅ Netlify habilita HTTPS automáticamente
 - ✅ Certificado SSL gratuito incluido
 - ✅ Force HTTPS redirect disponible
 
 ### 3. Optimizaciones de Performance
+
 ```toml
 # En netlify.toml
 [[headers]]
@@ -164,6 +177,7 @@ npm run build
 ## 📱 Verificación Post-Deploy
 
 ### Checklist de Validación
+
 - [ ] **PWA Score**: Lighthouse 100/100
 - [ ] **HTTPS**: Certificado SSL activo
 - [ ] **Service Worker**: Registrado correctamente
@@ -173,6 +187,7 @@ npm run build
 - [ ] **Offline**: Funciona sin conexión
 
 ### Testing en Producción
+
 ```bash
 # URLs a verificar
 https://tu-sitio.netlify.app/
@@ -181,6 +196,7 @@ https://tu-sitio.netlify.app/service-worker.js
 ```
 
 ### DevTools Verification
+
 1. **Application > Manifest**: Verificar datos
 2. **Application > Service Workers**: Estado "activated"
 3. **Network**: Simular offline y verificar funcionamiento
@@ -189,6 +205,7 @@ https://tu-sitio.netlify.app/service-worker.js
 ## 🚨 Troubleshooting Común
 
 ### Service Worker No Carga
+
 ```toml
 # Agregar a netlify.toml
 [[headers]]
@@ -198,6 +215,7 @@ https://tu-sitio.netlify.app/service-worker.js
 ```
 
 ### Manifest No Detectado
+
 ```toml
 [[headers]]
   for = "/manifest.json"
@@ -206,12 +224,14 @@ https://tu-sitio.netlify.app/service-worker.js
 ```
 
 ### PWA No Instalable
+
 1. Verificar HTTPS (debe estar activo)
 2. Confirmar Service Worker registrado
 3. Validar manifest.json sintaxis
 4. Revisar iconos accessible
 
 ### Build Fails
+
 ```bash
 # Limpiar node_modules y reinstalar
 rm -rf node_modules package-lock.json
@@ -222,44 +242,47 @@ npm run build
 ## 🔄 CI/CD con GitHub Actions (Opcional)
 
 ### `.github/workflows/deploy.yml`
+
 ```yaml
 name: Deploy to Netlify
 on:
   push:
-    branches: [ main ]
+    branches: [main]
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: '18'
-    - run: npm ci
-    - run: npm run build
-    - run: npm run lint
-    - name: Deploy to Netlify
-      uses: nwtgck/actions-netlify@v1.2
-      with:
-        publish-dir: './dist'
-      env:
-        NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      - run: npm ci
+      - run: npm run build
+      - run: npm run lint
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v1.2
+        with:
+          publish-dir: './dist'
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
 ```
 
 ## 📊 Monitoring y Analytics
 
 ### Netlify Analytics
+
 - **Pageviews**: Tráfico total
-- **Unique visitors**: Usuarios únicos  
+- **Unique visitors**: Usuarios únicos
 - **Top pages**: Páginas más visitadas
 - **Bandwidth**: Uso de datos
 
 ### PWA Específico
+
 ```javascript
 // En tu app - analytics.js
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.addEventListener('message', event => {
+  navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data.type === 'PWA_INSTALLED') {
       // Track instalación PWA
       analytics.track('PWA Installed');
@@ -271,6 +294,7 @@ if ('serviceWorker' in navigator) {
 ## 💰 Costos y Límites
 
 ### Plan Gratuito Netlify
+
 - ✅ **100GB** bandwidth/mes
 - ✅ **Sitios ilimitados**
 - ✅ **HTTPS** incluido
@@ -278,6 +302,7 @@ if ('serviceWorker' in navigator) {
 - ✅ **300 build minutes**/mes
 
 ### Upgrade Recomendado Si:
+
 - Más de 100GB bandwidth
 - Necesitas más build minutes
 - Requieres analytics avanzados
