@@ -13,9 +13,19 @@ export default defineConfig({
     assetsDir: 'assets',
     sourcemap: false,
     rollupOptions: {
+      input: {
+        main: 'index.html'
+      },
       output: {
         manualChunks: {
           vendor: ['react', 'react-dom']
+        },
+        assetFileNames: (assetInfo) => {
+          // Mantener manifest.json en la raíz
+          if (assetInfo.name === 'manifest.json') {
+            return '[name][extname]'
+          }
+          return 'assets/[name]-[hash][extname]'
         }
       }
     }
