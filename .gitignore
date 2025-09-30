@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+docs/screenshot-guide.md
+docs/PWA-DOCUMENTATION.md
+docs/branding-guide.md
+docs/cache-strategy.md
