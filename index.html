@@ -63,16 +63,36 @@
         animation: pulse 2s infinite;
       }
       
+      /* Responsive splash screen */
+      @media (min-width: 1200px) {
+        .splash-logo {
+          width: 160px;
+          height: 160px;
+          font-size: 64px;
+          margin-bottom: 30px;
+        }
+        
+        .splash-title {
+          font-size: 32px;
+        }
+        
+        .splash-subtitle {
+          font-size: 18px;
+        }
+      }
+      
       .splash-title {
         font-size: 24px;
         font-weight: 600;
         margin-bottom: 8px;
+        text-align: center;
       }
       
       .splash-subtitle {
         font-size: 16px;
         opacity: 0.8;
         margin-bottom: 40px;
+        text-align: center;
       }
       
       .loading-spinner {

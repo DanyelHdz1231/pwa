@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import './debug-fullwidth.css'
 import './App.css'
 
 function App() {
@@ -43,9 +44,9 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div className="app debug-container">
       <header className="app-header">
-        <div className="header-content">
+        <div className="header-content debug-container">
           <div className="logo-container">
             <div className="pwa-logo">P</div>
           </div>

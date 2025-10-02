@@ -1,6 +1,21 @@
 /* App.css - Estilos para la PWA */
+
+/* Reset y forzar ancho completo */
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 .app {
   min-height: 100vh;
+  width: 100%;
+  max-width: none;
   display: flex;
   flex-direction: column;
   background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
@@ -15,13 +30,13 @@
 }
 
 .header-content {
-  max-width: 1200px;
   margin: 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 1rem;
+  padding: 0 2rem;
 }
 
 .logo-container {
@@ -75,10 +90,10 @@
 
 .app-main {
   flex: 1;
-  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   width: 100%;
+  max-width: 100%;
   box-sizing: border-box;
 }
 
@@ -97,7 +112,6 @@
 .welcome-section p {
   font-size: 1.2rem;
   color: #666;
-  max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
 }
@@ -239,6 +253,77 @@
 }
 
 /* Responsive Design */
+
+/* Desktop Large (1920px+) */
+@media (min-width: 1920px) {
+  .app-main {
+    padding: 3rem 4rem;
+  }
+
+  .welcome-section h2 {
+    font-size: 3.5rem;
+  }
+
+  .welcome-section p {
+    font-size: 1.4rem;
+    max-width: 800px;
+  }
+
+  .features-section {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3rem;
+  }
+
+  .feature-card {
+    padding: 3rem;
+  }
+}
+
+/* Desktop Medium (1200px - 1919px) */
+@media (min-width: 1200px) and (max-width: 1919px) {
+  .app-main {
+    padding: 2.5rem 3rem;
+  }
+
+  .welcome-section h2 {
+    font-size: 3rem;
+  }
+
+  .features-section {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+/* Desktop Small (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+  .app-main {
+    padding: 2rem;
+  }
+
+  .features-section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+/* Tablet (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+  .app-main {
+    padding: 2rem;
+  }
+
+  .features-section {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+
+  .welcome-section h2 {
+    font-size: 2.2rem;
+  }
+}
+
+/* Mobile Large (481px - 767px) */
 @media (max-width: 768px) {
   .header-content {
     flex-direction: column;
@@ -266,6 +351,7 @@
   }
 }
 
+/* Mobile Small (max 480px) */
 @media (max-width: 480px) {
   .welcome-section h2 {
     font-size: 1.8rem;
