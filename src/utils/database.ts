@@ -3,6 +3,7 @@ import type { DBSchema, IDBPDatabase } from 'idb';
 
 // Definir la estructura de la base de datos
 export interface MyPWADB extends DBSchema {
+  // @ts-expect-error - Known issue with idb types and custom schemas
   activities: {
     key: number;
     value: {
