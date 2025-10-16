@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convertir SVG a PNG - PWA Icons</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 900px;
+            margin: 50px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .instructions {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .icon-card {
+            background: white;
+            color: #333;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .icon-card img {
+            width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .icon-card canvas {
+            display: none;
+        }
+        button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+            width: 100%;
+        }
+        button:hover {
+            background: #1565c0;
+        }
+        button:active {
+            background: #0d47a1;
+        }
+        .success {
+            color: #4caf50;
+            font-weight: bold;
+            margin-top: 5px;
+            display: none;
+        }
+        code {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+        .download-all {
+            background: #4caf50;
+            padding: 15px 30px;
+            font-size: 18px;
+            margin: 30px auto;
+            display: block;
+            max-width: 300px;
+        }
+        .download-all:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎨 Convertir Íconos SVG a PNG</h1>
+    
+    <div class="instructions">
+        <h3>📋 Instrucciones:</h3>
+        <ol>
+            <li>Haz clic en el botón <strong>"Descargar PNG"</strong> de cada ícono</li>
+            <li>Guarda cada archivo con el nombre exacto: <code>icon-{tamaño}x{tamaño}.png</code></li>
+            <li>Coloca todos los archivos PNG en la carpeta <code>public/icons/</code></li>
+            <li>Los archivos <strong>críticos para Android</strong> son:
+                <ul>
+                    <li><code>icon-192x192.png</code> (notificaciones)</li>
+                    <li><code>icon-512x512.png</code> (pantalla de inicio)</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="icon-grid" id="iconGrid"></div>
+
+    <button class="download-all" onclick="downloadAll()">⬇️ Descargar Todos los PNG</button>
+
+    <script>
+        const sizes = [72, 96, 128, 144, 152, 192, 384, 512];
+        const iconGrid = document.getElementById('iconGrid');
+
+        // Generar SVG dinámicamente
+        function generateSVG(size) {
+            const svg = `
+                <svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="${size}" height="${size}" fill="#1976d2" rx="${size * 0.15}"/>
+                    <circle cx="${size / 2}" cy="${size / 2}" r="${size * 0.3}" fill="#ffffff"/>
+                    <path d="M ${size / 2} ${size * 0.3} L ${size * 0.65} ${size / 2} L ${size / 2} ${size * 0.7} L ${size * 0.35} ${size / 2} Z" fill="#1976d2"/>
+                    ${size >= 192 ? `
+                        <text x="${size / 2}" y="${size * 0.9}" 
+                              font-family="Arial, sans-serif" 
+                              font-size="${size * 0.1}" 
+                              font-weight="bold"
+                              fill="#ffffff" 
+                              text-anchor="middle">PWA</text>
+                    ` : ''}
+                </svg>
+            `;
+            return 'data:image/svg+xml;base64,' + btoa(svg);
+        }
+
+        // Convertir SVG a PNG
+        function svgToPng(svgDataUrl, size, callback) {
+            const img = new Image();
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                canvas.width = size;
+                canvas.height = size;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, size, size);
+                
+                canvas.toBlob(function(blob) {
+                    callback(blob);
+                }, 'image/png');
+            };
+            img.src = svgDataUrl;
+        }
+
+        // Descargar PNG
+        function downloadPng(size, cardElement) {
+            const svgDataUrl = generateSVG(size);
+            
+            svgToPng(svgDataUrl, size, function(blob) {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `icon-${size}x${size}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Mostrar mensaje de éxito
+                const successMsg = cardElement.querySelector('.success');
+                successMsg.style.display = 'block';
+                setTimeout(() => {
+                    successMsg.style.display = 'none';
+                }, 3000);
+            });
+        }
+
+        // Descargar todos
+        let downloadQueue = [];
+        function downloadAll() {
+            sizes.forEach((size, index) => {
+                setTimeout(() => {
+                    const card = document.querySelector(`[data-size="${size}"]`);
+                    downloadPng(size, card);
+                }, index * 500); // Delay de 500ms entre descargas
+            });
+        }
+
+        // Crear cards para cada tamaño
+        sizes.forEach(size => {
+            const card = document.createElement('div');
+            card.className = 'icon-card';
+            card.setAttribute('data-size', size);
+            
+            const svgDataUrl = generateSVG(size);
+            
+            card.innerHTML = `
+                <img src="${svgDataUrl}" alt="Ícono ${size}x${size}">
+                <h3>${size}x${size}</h3>
+                <p><code>icon-${size}x${size}.png</code></p>
+                <button onclick="downloadPng(${size}, this.parentElement)">
+                    ⬇️ Descargar PNG
+                </button>
+                <div class="success">✅ Descargado</div>
+            `;
+            
+            iconGrid.appendChild(card);
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 72 72" width="72" height="72">
-  <rect width="72" height="72" rx="12" fill="#1976d2"/>
-  <text x="36" y="46" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="32" font-weight="bold">P</text>
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="72" height="72" xmlns="http://www.w3.org/2000/svg">
+  <!-- Fondo -->
+  <rect width="72" height="72" fill="#1976d2" rx="10.799999999999999"/>
+  
+  <!-- Círculo central -->
+  <circle cx="36" cy="36" r="21.599999999999998" fill="#ffffff"/>
+  
+  <!-- Decoración (forma de diamante) -->
+  <path d="M 36 21.599999999999998 L 46.800000000000004 36 L 36 50.4 L 25.2 36 Z" fill="#1976d2"/>
+  
+  <!-- Texto PWA (solo en íconos grandes) -->
+  
 </svg>

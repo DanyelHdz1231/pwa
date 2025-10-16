@@ -29,21 +29,22 @@ messaging.onBackgroundMessage((payload) => {
     const notificationTitle = payload.notification?.title || 'Nueva Notificación';
     const notificationOptions = {
         body: payload.notification?.body || 'Tienes un nuevo mensaje',
-        icon: payload.notification?.icon || '/icons/icon-192x192.svg',
-        badge: '/icons/icon-72x72.svg',
+        icon: payload.notification?.icon || '/icons/icon-192x192.png',
+        badge: '/icons/icon-72x72.png',
         data: payload.data,
         tag: payload.data?.tag || 'firebase-notification',
         requireInteraction: false,
+        vibrate: [200, 100, 200], // Patrón de vibración para Android
         actions: [
             {
                 action: 'open',
                 title: 'Abrir',
-                icon: '/icons/icon-72x72.svg'
+                icon: '/icons/icon-72x72.png'
             },
             {
                 action: 'close',
                 title: 'Cerrar',
-                icon: '/icons/icon-72x72.svg'
+                icon: '/icons/icon-72x72.png'
             }
         ]
     };

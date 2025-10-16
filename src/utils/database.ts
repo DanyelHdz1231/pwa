@@ -42,7 +42,7 @@ export async function initDB(): Promise<IDBPDatabase<MyPWADB>> {
         keyPath: 'id',
         autoIncrement: true,
       });
-      
+
       activitiesStore.createIndex('by-created', 'createdAt');
       activitiesStore.createIndex('by-synced', 'synced');
 
@@ -60,7 +60,7 @@ export async function initDB(): Promise<IDBPDatabase<MyPWADB>> {
 // Funciones para actividades
 export async function addActivity(activity: Omit<MyPWADB['activities']['value'], 'id' | 'createdAt' | 'synced'>) {
   const database = await initDB();
-  
+
   // Si hay conexión, intentar sincronizar inmediatamente
   let synced = false;
   if (navigator.onLine) {
@@ -75,19 +75,19 @@ export async function addActivity(activity: Omit<MyPWADB['activities']['value'],
       synced = false;
     }
   }
-  
+
   const activityData = {
     ...activity,
     createdAt: new Date(),
     synced: synced,
   };
-  
+
   const id = await database.add('activities', activityData);
-  
+
   // Agregar a la cola de sincronización solo si no se pudo sincronizar
   if (!synced) {
     await addToSyncQueue('create', { ...activityData, id }, '/api/activities');
-    
+
     // Registrar Background Sync para cuando vuelva la conexión
     if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
       try {
@@ -98,7 +98,7 @@ export async function addActivity(activity: Omit<MyPWADB['activities']['value'],
       }
     }
   }
-  
+
   return id;
 }
 
@@ -115,10 +115,10 @@ export async function getActivity(id: number) {
 export async function updateActivity(id: number, updates: Partial<MyPWADB['activities']['value']>) {
   const database = await initDB();
   const activity = await database.get('activities', id);
-  
+
   if (activity) {
     let synced = false;
-    
+
     // Si hay conexión, intentar sincronizar inmediatamente
     if (navigator.onLine) {
       try {
@@ -131,10 +131,10 @@ export async function updateActivity(id: number, updates: Partial<MyPWADB['activ
         synced = false;
       }
     }
-    
+
     const updatedActivity = { ...activity, ...updates, synced };
     await database.put('activities', updatedActivity);
-    
+
     // Agregar a la cola de sincronización solo si no se pudo sincronizar
     if (!synced) {
       await addToSyncQueue('update', updatedActivity, `/api/activities/${id}`);
@@ -148,20 +148,20 @@ export async function updateActivity(id: number, updates: Partial<MyPWADB['activ
         }
       }
     }
-    
+
     return updatedActivity;
   }
-  
+
   return null;
 }
 
 export async function deleteActivity(id: number) {
   const database = await initDB();
   const activity = await database.get('activities', id);
-  
+
   if (activity) {
     let synced = false;
-    
+
     // Si hay conexión, intentar sincronizar inmediatamente
     if (navigator.onLine) {
       try {
@@ -174,10 +174,10 @@ export async function deleteActivity(id: number) {
         synced = false;
       }
     }
-    
+
     // Eliminar de la base de datos local
     await database.delete('activities', id);
-    
+
     // Agregar a la cola de sincronización solo si no se pudo sincronizar
     if (!synced) {
       await addToSyncQueue('delete', { id }, `/api/activities/${id}`);
@@ -191,10 +191,10 @@ export async function deleteActivity(id: number) {
         }
       }
     }
-    
+
     return true;
   }
-  
+
   return false;
 }
 
@@ -228,7 +228,7 @@ export async function clearSyncQueue() {
 export async function markAsSynced(id: number) {
   const database = await initDB();
   const activity = await database.get('activities', id);
-  
+
   if (activity) {
     activity.synced = true;
     await database.put('activities', activity);
@@ -244,13 +244,13 @@ export async function getUnsyncedActivities() {
 async function simulateServerSync(action: 'create' | 'update' | 'delete', data: any): Promise<void> {
   // En un entorno real, aquí haríamos la petición HTTP al servidor
   // Por ahora, simularemos que siempre funciona cuando hay conexión
-  
+
   const endpoints = {
     create: 'http://localhost:3002/api/activities',
     update: `http://localhost:3002/api/activities/${data.id}`,
     delete: `http://localhost:3002/api/activities/${data.id}`
   };
-  
+
   const options = {
     method: action === 'create' ? 'POST' : action === 'update' ? 'PUT' : 'DELETE',
     headers: {
@@ -258,11 +258,11 @@ async function simulateServerSync(action: 'create' | 'update' | 'delete', data: 
     },
     body: action !== 'delete' ? JSON.stringify(data) : undefined,
   };
-  
+
   try {
     // Intentar hacer la petición real al servidor
     const response = await fetch(endpoints[action], options);
-    
+
     if (response.ok) {
       console.log(`✅ ${action} sincronizado con el servidor`);
       return;
@@ -272,10 +272,10 @@ async function simulateServerSync(action: 'create' | 'update' | 'delete', data: 
   } catch (error) {
     // Si no hay servidor o falla, simular éxito para desarrollo
     console.log(`🔧 Servidor no disponible, simulando sincronización exitosa para ${action}`);
-    
+
     // Simular delay de red
     await new Promise(resolve => setTimeout(resolve, 500));
-    
+
     // En desarrollo, siempre consideramos exitoso
     return;
   }
