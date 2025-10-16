@@ -1,68 +1,28 @@
-# Configuración de Netlify para PWA con Firebase Cloud Messaging[build]
-
-publish = "dist"
-
-[build]command = "npm run build"
-
+﻿[build]
   publish = "dist"
-
-  command = "npm run build"[build.environment]
-
-NODE_VERSION = "20"
+  command = "npm run build"
 
 [build.environment]
+  NODE_VERSION = "20"
 
-  NODE_VERSION = "20"[[redirects]]
-
-from = "/*"
-
-# Redirects - SPA routingto = "/index.html"
-
-[[redirects]]status = 200
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
 
-# Headers de seguridad
 [[headers]]
   for = "/*"
   [headers.values]
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
-    X-XSS-Protection = "1; mode=block"
-    Referrer-Policy = "strict-origin-when-cross-origin"
 
-# Headers para Service Workers de Firebase
 [[headers]]
   for = "/firebase-messaging-sw.js"
   [headers.values]
     Service-Worker-Allowed = "/"
     Cache-Control = "public, max-age=0, must-revalidate"
-    Content-Type = "application/javascript; charset=utf-8"
 
-# Headers para Service Worker principal
-[[headers]]
-  for = "/service-worker*.js"
-  [headers.values]
-    Service-Worker-Allowed = "/"
-    Cache-Control = "public, max-age=0, must-revalidate"
-    Content-Type = "application/javascript; charset=utf-8"
-
-# Headers para manifest.json
 [[headers]]
   for = "/manifest.json"
   [headers.values]
     Content-Type = "application/manifest+json"
-    Cache-Control = "public, max-age=31536000"
-
-# Headers para assets (imágenes, fuentes, etc.)
-[[headers]]
-  for = "/assets/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
-
-# Headers para íconos PWA
-[[headers]]
-  for = "/icons/*"
-  [headers.values]
-    Cache-Control = "public, max-age=31536000, immutable"
