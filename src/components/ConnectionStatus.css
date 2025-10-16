@@ -1,0 +1,56 @@
+.connection-status {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1000;
+  padding: 12px 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: slideIn 0.3s ease-out;
+  max-width: 300px;
+}
+
+.connection-status.online {
+  background-color: #4caf50;
+  color: white;
+}
+
+.connection-status.offline {
+  background-color: #f44336;
+  color: white;
+}
+
+.connection-status-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.connection-icon {
+  font-size: 16px;
+}
+
+.connection-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .connection-status {
+    top: 10px;
+    right: 10px;
+    left: 10px;
+    max-width: none;
+  }
+}

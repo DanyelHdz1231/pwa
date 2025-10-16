@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin Conexión - Mi PWA</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .offline-container {
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .offline-icon {
+            font-size: 64px;
+            margin-bottom: 20px;
+            display: block;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 24px;
+            opacity: 0.9;
+        }
+        
+        .retry-button {
+            background: #1976d2;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+        
+        .retry-button:hover {
+            background: #1565c0;
+            transform: translateY(-2px);
+        }
+        
+        .offline-features {
+            margin-top: 30px;
+            text-align: left;
+        }
+        
+        .offline-features h3 {
+            margin-bottom: 15px;
+            color: #e3f2fd;
+        }
+        
+        .offline-features ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .offline-features li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .offline-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .offline-container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .offline-icon {
+                font-size: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <span class="offline-icon">📱</span>
+        <h1>Sin Conexión</h1>
+        <p>No hay conexión a Internet en este momento, pero puedes seguir usando la aplicación con las funciones offline.</p>
+        
+        <button class="retry-button" onclick="window.location.reload()">
+            🔄 Reintentar
+        </button>
+        
+        <button class="retry-button" onclick="window.history.back()">
+            ← Volver
+        </button>
+        
+        <div class="offline-features">
+            <h3>🔧 Funciones disponibles offline:</h3>
+            <ul>
+                <li>Crear nuevas actividades</li>
+                <li>Ver actividades guardadas</li>
+                <li>Marcar como completadas</li>
+                <li>Eliminar actividades</li>
+                <li>Los cambios se sincronizarán automáticamente</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Verificar conexión cada 5 segundos
+        setInterval(() => {
+            if (navigator.onLine) {
+                window.location.reload();
+            }
+        }, 5000);
+
+        // Escuchar evento de conexión restaurada
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>

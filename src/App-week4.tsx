@@ -4,7 +4,7 @@ import './App.css'
 import { ConnectionStatus } from './components/ConnectionStatus'
 import { ActivityForm } from './components/ActivityForm'
 import { ActivityList } from './components/ActivityList'
-import { FirebasePushManager } from './utils/firebasePushNotifications'
+import { PushNotificationManager } from './utils/pushNotifications'
 import { initDB } from './utils/database'
 
 function App() {
@@ -54,12 +54,12 @@ function App() {
 
   // Verificar soporte para notificaciones push
   useEffect(() => {
-    FirebasePushManager.checkSupport().then((supported: boolean) => {
+    PushNotificationManager.checkSupport().then(supported => {
       setPushSupported(supported);
       if (supported) {
-        // Verificar si ya hay un token guardado (indica suscripción activa)
-        const token = localStorage.getItem('fcm-token');
-        setPushSubscribed(!!token);
+        PushNotificationManager.getSubscription().then(subscription => {
+          setPushSubscribed(!!subscription);
+        });
       }
     });
   }, []);
@@ -79,35 +79,27 @@ function App() {
 
   const handlePushSubscribe = async () => {
     try {
-      const token = await FirebasePushManager.subscribe();
-      setPushSubscribed(!!token);
-      if (token) {
-        console.log('Suscripción exitosa. Token FCM:', token);
+      const subscription = await PushNotificationManager.subscribe();
+      setPushSubscribed(!!subscription);
+      if (subscription) {
+        // Enviar notificación de prueba después de suscribirse
+        setTimeout(() => {
+          PushNotificationManager.sendTestNotification();
+        }, 2000);
       }
     } catch (error) {
       console.error('Error al suscribirse a notificaciones:', error);
-      alert('Error al activar notificaciones. Verifica la configuración de Firebase.');
     }
   }
 
   const handlePushUnsubscribe = async () => {
     try {
-      const result = await FirebasePushManager.unsubscribe();
+      const result = await PushNotificationManager.unsubscribe();
       if (result) {
         setPushSubscribed(false);
       }
     } catch (error) {
       console.error('Error al desuscribirse:', error);
-    }
-  }
-
-  const handleSendTestNotification = async () => {
-    try {
-      await FirebasePushManager.sendTestNotification();
-      alert('¡Notificación de prueba enviada!');
-    } catch (error) {
-      console.error('Error al enviar notificación de prueba:', error);
-      alert('Error al enviar notificación. Verifica que estés suscrito.');
     }
   }
 
@@ -148,32 +140,14 @@ function App() {
                     }
                   </p>
                   {pushSubscribed ? (
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                      <button className="feature-button" onClick={handleSendTestNotification}>
-                        🧪 Enviar Notificación de Prueba
-                      </button>
-                      <button className="feature-button secondary" onClick={handlePushUnsubscribe}>
-                        Desactivar Notificaciones
-                      </button>
-                    </div>
+                    <button className="feature-button secondary" onClick={handlePushUnsubscribe}>
+                      Desactivar Notificaciones
+                    </button>
                   ) : (
                     <button className="feature-button" onClick={handlePushSubscribe}>
                       Activar Notificaciones
                     </button>
                   )}
-                </div>
-              )}
-
-              {!pushSupported && !window.isSecureContext && (
-                <div className="feature-card" style={{ backgroundColor: '#fff3cd', borderColor: '#ffc107' }}>
-                  <h3>⚠️ Contexto No Seguro</h3>
-                  <p style={{ fontSize: '14px', marginBottom: '10px' }}>
-                    Las notificaciones push requieren HTTPS o localhost. 
-                    Actualmente estás accediendo desde: <strong>{window.location.hostname}</strong>
-                  </p>
-                  <p style={{ fontSize: '13px', color: '#666' }}>
-                    💡 <strong>Solución:</strong> Abre la app en <code>http://localhost:3000/</code> en lugar de usar la IP de red.
-                  </p>
                 </div>
               )}
               
