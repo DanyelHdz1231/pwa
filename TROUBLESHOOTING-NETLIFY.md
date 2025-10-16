@@ -5,6 +5,7 @@
 ### 🐛 Error 1: "Unexpected character at row 5"
 
 **Error completo:**
+
 ```
 Failed during stage 'Reading and parsing configuration files':
 Could not parse configuration file
@@ -12,6 +13,7 @@ Unexpected character, expected only whitespace or comments till end of line at r
 ```
 
 **Causa:**
+
 - ❌ Duplicación de secciones
 - ❌ Falta de saltos de línea entre secciones
 - ❌ Formato TOML incorrecto
@@ -24,6 +26,7 @@ Reescribir el archivo con formato TOML correcto.
 ### 🐛 Error 2: "Unknown character 65279" (BOM)
 
 **Error completo:**
+
 ```
 Failed during stage 'Reading and parsing configuration files':
 Could not parse configuration file
@@ -32,11 +35,13 @@ Unknown character "65279" at row 1, col 2, pos 1:
 ```
 
 **Causa:**
+
 - ❌ El archivo tiene un BOM (Byte Order Mark) UTF-8
 - ❌ Windows a veces agrega este carácter invisible al inicio
 - ❌ El carácter `65279` es el BOM que TOML no acepta
 
 **Solución aplicada:**
+
 ```powershell
 # Eliminar archivo con BOM
 Remove-Item netlify.toml -Force

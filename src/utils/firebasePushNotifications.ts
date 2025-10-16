@@ -112,8 +112,8 @@ export class FirebasePushManager {
             const notificationTitle = payload.notification?.title || 'Nueva Notificación';
             const notificationOptions: NotificationOptions = {
                 body: payload.notification?.body || 'Tienes un nuevo mensaje',
-                icon: payload.notification?.icon || '/icons/icon-192x192.svg',
-                badge: '/icons/icon-72x72.svg',
+                icon: payload.notification?.icon || '/icons/icon-192x192.png',
+                badge: '/icons/icon-72x72.png',
                 tag: 'firebase-foreground',
                 requireInteraction: false,
             };
@@ -141,8 +141,8 @@ export class FirebasePushManager {
             const notificationTitle = '🎉 ¡Notificación de Prueba!';
             const notificationOptions: NotificationOptions = {
                 body: 'Esta es una notificación de prueba enviada desde el frontend.',
-                icon: '/icons/icon-192x192.svg',
-                badge: '/icons/icon-72x72.svg',
+                icon: '/icons/icon-192x192.png',
+                badge: '/icons/icon-72x72.png',
                 tag: 'test-notification',
                 requireInteraction: false,
                 data: {
