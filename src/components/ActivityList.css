@@ -1,0 +1,216 @@
+.activity-list-container {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+.list-header {
+  margin-bottom: 24px;
+}
+
+.list-header h2 {
+  color: #1976d2;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.filters {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 16px;
+  background: #f5f5f5;
+  border-radius: 8px;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filter-group label {
+  font-weight: 600;
+  color: #333;
+  font-size: 14px;
+}
+
+.filter-group select {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 14px;
+}
+
+.loading {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  font-size: 18px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #666;
+  background: #f9f9f9;
+  border-radius: 8px;
+  margin: 20px 0;
+}
+
+.empty-state p {
+  margin: 8px 0;
+}
+
+.activities-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+}
+
+.activity-card {
+  background: white;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.activity-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.activity-card.completed {
+  border-color: #4caf50;
+  background: #f8fff8;
+}
+
+.activity-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.activity-header h3 {
+  margin: 0;
+  color: #333;
+  font-size: 16px;
+  flex: 1;
+  margin-right: 12px;
+}
+
+.activity-header h3.line-through {
+  text-decoration: line-through;
+  color: #666;
+}
+
+.activity-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-button,
+.delete-button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.toggle-button:hover {
+  background: #e8f5e9;
+}
+
+.delete-button:hover {
+  background: #ffebee;
+}
+
+.activity-description {
+  color: #666;
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0 0 12px 0;
+}
+
+.activity-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+}
+
+.category-tag {
+  background: #e3f2fd;
+  color: #1976d2;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.category-tag.category-trabajo {
+  background: #fff3e0;
+  color: #f57c00;
+}
+
+.category-tag.category-estudio {
+  background: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.category-tag.category-salud {
+  background: #e8f5e8;
+  color: #2e7d32;
+}
+
+.category-tag.category-hogar {
+  background: #fce4ec;
+  color: #c2185b;
+}
+
+.activity-date {
+  color: #999;
+}
+
+.sync-status {
+  font-size: 14px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+  .activity-list-container {
+    margin: 10px;
+    padding: 16px;
+  }
+
+  .activities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .filters {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .activity-header {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .activity-actions {
+    align-self: flex-end;
+  }
+}
